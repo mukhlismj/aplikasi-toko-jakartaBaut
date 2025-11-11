@@ -4,7 +4,8 @@
   "description": "",
   "main": "script.js",
   "scripts": {
-    "start": "json-server --watch data.json --port 10000",
+    "start": ""start": "json-server --watch data.json --port $PORT"
+",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
