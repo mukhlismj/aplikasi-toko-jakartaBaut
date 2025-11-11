@@ -1,0 +1,48 @@
+{
+  "data": [
+    {
+      "nama": "baut hitam 6x10",
+      "harga": 1200,
+      "modal": 70,
+      "kategori": "baut hitam",
+      "stok": 400,
+      "paket": "20 pcs",
+      "isiKotak": "270",
+      "keterangan": "",
+      "id": "e485"
+    },
+    {
+      "id": "e37d",
+      "nama": "baut 12",
+      "harga": 13000,
+      "modal": 100,
+      "kategori": "12000",
+      "stok": 13,
+      "paket": "12000",
+      "isiKotak": "31",
+      "keterangan": ""
+    },
+    {
+      "id": "5faa",
+      "nama": "ok",
+      "harga": 4433,
+      "modal": 77,
+      "kategori": "susu dingin",
+      "stok": 12123,
+      "paket": "11",
+      "isiKotak": "1131",
+      "keterangan": "7U77"
+    },
+    {
+      "id": "52dd",
+      "nama": "baut kuning M12x75",
+      "harga": 331,
+      "modal": 44,
+      "kategori": "kdsjd",
+      "stok": 78,
+      "paket": "o38",
+      "isiKotak": "88d",
+      "keterangan": "isi"
+    }
+  ]
+}

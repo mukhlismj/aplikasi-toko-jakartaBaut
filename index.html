@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aplikasi Harga Barang</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Toko Jakarta Baut</h1>
+      <p>
+        Menjual segala jenis baut dan mur beserta kelengkapan alat-alat bengkel
+      </p>
+    </div>
+
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <h3>Kategori</h3>
+        <ul id="daftarKategori"></ul>
+        <button id="tampilSemua">Tampilkan Semua</button>
+        <button id="exportBtn">Export CSV</button>
+      </div>
+
+      <!-- login -->
+      <div id="loginModal" class="modal" style="display: block">
+        <div class="modal-content">
+          <h2>Login</h2>
+          <input type="text" id="username" placeholder="Username" />
+          <input type="password" id="password" placeholder="Password" />
+          <button onclick="login()">Login</button>
+        </div>
+      </div>
+
+      <div class="main-content" style="display: none">
+        <!-- Main Content -->
+
+        <div class="main-content">
+          <div class="filter-container">
+            <input
+              type="text"
+              id="cari"
+              placeholder="Cari nama/kategori..."
+              onkeyup="pencarianLive()"
+            />
+
+            <button id="tambahBarangBtn" style="margin-top: 20px">
+              + Tambah Barang
+            </button>
+            <button onclick="logout()">Logout</button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Nama</th>
+                  <th>Harga</th>
+                  <th>Modal</th>
+                  <th>Kategori</th>
+                  <th>Stok</th>
+                  <th>Paket</th>
+                  <th>Isi/Kotak</th>
+                  <th>Keterangan</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tabelBarang"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Box -->
+    <div id="modalBox" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="tutupModal()">&times;</span>
+        <h2 id="judulModal">Tambah Barang</h2>
+
+        <input type="hidden" id="editIndex" />
+        <input type="text" id="nama" placeholder="Nama barang" />
+        <input type="number" id="harga" placeholder="Harga jual" />
+        <input type="number" id="modal" placeholder="Modal" />
+        <input type="text" id="kategori" placeholder="Kategori" />
+        <input type="number" id="stok" placeholder="Stok" />
+        <input type="text" id="paket" placeholder="Paket (opsional)" />
+        <input type="text" id="isiKotak" placeholder="Isi/Kotak" />
+        <input type="text" id="keterangan" placeholder="Keterangan" />
+        <button id="simpanBtn">Simpan</button>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
