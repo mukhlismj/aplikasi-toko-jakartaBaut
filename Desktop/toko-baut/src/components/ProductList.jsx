@@ -37,6 +37,7 @@ export default function ProductList({ addToCart }) {
         showPrice: true,
         showBarcode: true,
         showQtyPerUnit: true,
+        showBorder: true,
     });
     const [showBulkUpload, setShowBulkUpload] = useState(false);
     const [bulkPreview, setBulkPreview] = useState(null);
@@ -137,7 +138,7 @@ export default function ProductList({ addToCart }) {
 
             for (let i = 0; i < item.qty; i++) {
                 labelsHTML += `
-                    <div class="label" style="width:${s.labelWidth}mm;height:${s.labelHeight}mm;">
+                    <div class="label ${s.showBorder ? 'with-border' : ''}" style="width:${s.labelWidth}mm;height:${s.labelHeight}mm;">
                         ${s.showStoreName ? `<div class="store">${storeName}</div>` : ''}
                         ${s.showProductName ? `<div class="name">${productName}</div>` : ''}
                         ${s.showSize && productSize ? `<div class="size">${productSize}</div>` : ''}
@@ -190,6 +191,7 @@ export default function ProductList({ addToCart }) {
                 svg { display: block; margin: 0 auto; max-width: 100%; }
                 @media print {
                     .label { border: none; }
+                    .label.with-border { border: 1px dashed #ccc; }
                     @page { margin: 0; }
                 }
             </style>
@@ -816,7 +818,7 @@ export default function ProductList({ addToCart }) {
                                 {/* Preview */}
                                 <div style={{
                                     background: '#fff', borderRadius: 'var(--radius-sm)', padding: '12px',
-                                    marginBottom: 16, textAlign: 'center', border: '1px solid var(--border-color)'
+                                    marginBottom: 16, textAlign: 'center', border: barcodeSettings.showBorder ? '1px dashed #ccc' : '1px solid var(--border-color)',
                                 }}>
                                     <div style={{ fontSize: '7pt', fontWeight: 'bold', color: '#000' }}>
                                         {barcodeSettings.showStoreName && (storeSettings?.storeName || 'Toko Jakarta Baut')}
@@ -889,6 +891,7 @@ export default function ProductList({ addToCart }) {
                                         { key: 'showQtyPerUnit', label: 'Info Isi per Paket/Satuan' },
                                         { key: 'showPrice', label: 'Harga Jual' },
                                         { key: 'showBarcode', label: 'Barcode' },
+                                        { key: 'showBorder', label: 'Garis Batas/Potong' },
                                     ].map(opt => (
                                         <label key={opt.key} style={{
                                             display: 'flex', alignItems: 'center', gap: 10, padding: '4px 8px',
