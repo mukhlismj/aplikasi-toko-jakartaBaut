@@ -29,6 +29,7 @@ export default function POS({ carts, setCarts, activeCartId, setActiveCartId, ad
     const [completedTransaction, setCompletedTransaction] = useState(null);
     const [detailProduct, setDetailProduct] = useState(null);
     const [editProduct, setEditProduct] = useState(null);
+    const [confirmDeleteCart, setConfirmDeleteCart] = useState(null);
     const searchRef = useRef(null);
 
     const uniqueCategories = useMemo(() =>
@@ -110,6 +111,22 @@ export default function POS({ carts, setCarts, activeCartId, setActiveCartId, ad
         const newCartNumber = carts.length + 1;
         setCarts(prev => [...prev, { id: newId, name: `Pelanggan ${newCartNumber}`, items: [], customerName: '' }]);
         setActiveCartId(newId);
+    };
+
+    const handleDeleteCartClick = (cartId) => {
+        const cartToDelete = carts.find(c => c.id === cartId);
+        if (cartToDelete && cartToDelete.items.length > 0) {
+            setConfirmDeleteCart(cartToDelete);
+        } else {
+            deleteCart(cartId);
+        }
+    };
+
+    const confirmCartDeletion = () => {
+        if (confirmDeleteCart) {
+            deleteCart(confirmDeleteCart.id);
+            setConfirmDeleteCart(null);
+        }
     };
 
     const deleteCart = (cartId) => {
@@ -235,41 +252,61 @@ export default function POS({ carts, setCarts, activeCartId, setActiveCartId, ad
 
             <div className="pos-cart" style={{ display: 'flex', flexDirection: 'column' }}>
                 {/* Cart Tabs */}
-                <div style={{ display: 'flex', overflowX: 'auto', borderBottom: '1px solid var(--border-color)', background: 'var(--bg-secondary)', padding: '8px 8px 0', gap: 4 }}>
-                    {carts.map((c, i) => (
-                        <div key={c.id}
-                            style={{
-                                padding: '8px 12px',
-                                background: c.id === activeCartId ? 'var(--bg-card)' : 'transparent',
-                                border: '1px solid var(--border-color)',
-                                borderBottom: c.id === activeCartId ? '1px solid var(--bg-card)' : '1px solid var(--border-color)',
-                                marginBottom: '-1px',
-                                borderRadius: '6px 6px 0 0',
-                                cursor: 'pointer',
-                                display: 'flex', alignItems: 'center', gap: 8,
-                                fontWeight: c.id === activeCartId ? 600 : 400,
-                                color: c.id === activeCartId ? 'var(--text-heading)' : 'var(--text-muted)',
-                                minWidth: 'max-content',
-                                zIndex: c.id === activeCartId ? 2 : 1
-                            }}
-                            onClick={() => setActiveCartId(c.id)}
-                        >
-                            <span>{c.customerName || `Pelanggan ${i + 1}`}</span>
-                            {c.items.length > 0 && (
-                                <span style={{ background: 'var(--accent-gold-dim)', color: 'var(--accent-gold)', fontSize: '0.7rem', padding: '2px 6px', borderRadius: 10, fontWeight: 700 }}>
-                                    {c.items.length}
-                                </span>
-                            )}
-                            <button className="btn-icon" onClick={(e) => { e.stopPropagation(); deleteCart(c.id); }} style={{ padding: 2 }}>
-                                <X size={12} color="var(--text-muted)" />
+                <div style={{ display: 'flex', borderBottom: '1px solid var(--border-color)', background: 'var(--bg-secondary)', padding: '8px 8px 0', gap: 6, alignItems: 'flex-end' }}>
+
+                    <div style={{ display: 'flex', overflowX: 'auto', gap: 4, flex: 1, paddingBottom: 2 }} className="custom-scrollbar-hide">
+                        {carts.map((c, i) => (
+                            <div key={c.id}
+                                style={{
+                                    padding: '8px 12px',
+                                    background: c.id === activeCartId ? 'var(--bg-card)' : 'transparent',
+                                    border: '1px solid var(--border-color)',
+                                    borderBottom: c.id === activeCartId ? '1px solid var(--bg-card)' : '1px solid var(--border-color)',
+                                    marginBottom: '-1px',
+                                    borderRadius: '6px 6px 0 0',
+                                    cursor: 'pointer',
+                                    display: 'flex', alignItems: 'center', gap: 8,
+                                    fontWeight: c.id === activeCartId ? 600 : 400,
+                                    color: c.id === activeCartId ? 'var(--text-heading)' : 'var(--text-muted)',
+                                    minWidth: 'max-content',
+                                    zIndex: c.id === activeCartId ? 2 : 1
+                                }}
+                                onClick={() => setActiveCartId(c.id)}
+                            >
+                                <span>{c.customerName || `Pelanggan ${i + 1}`}</span>
+                                {c.items.length > 0 && (
+                                    <span style={{ background: 'var(--accent-gold-dim)', color: 'var(--accent-gold)', fontSize: '0.7rem', padding: '2px 6px', borderRadius: 10, fontWeight: 700 }}>
+                                        {c.items.length}
+                                    </span>
+                                )}
+                                <button className="btn-icon" onClick={(e) => { e.stopPropagation(); handleDeleteCartClick(c.id); }} style={{ padding: 2 }}>
+                                    <X size={12} color="var(--text-muted)" />
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, paddingBottom: 6 }}>
+                        {carts.length > 3 && (
+                            <select
+                                value={activeCartId}
+                                onChange={(e) => setActiveCartId(Number(e.target.value))}
+                                style={{ padding: '6px 8px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', fontSize: '0.8rem', background: 'var(--bg-card)', maxWidth: 120 }}
+                                title="Pindah ke antrean lain"
+                            >
+                                {carts.map((c, i) => (
+                                    <option key={c.id} value={c.id}>
+                                        {c.customerName || `Pel. ${i + 1}`} ({c.items.length})
+                                    </option>
+                                ))}
+                            </select>
+                        )}
+                        {carts.length < 10 && (
+                            <button className="btn btn-secondary btn-sm" onClick={createNewCart} style={{ padding: '6px 12px', background: 'var(--bg-card)' }} title="Pesan Baru (Antrean)">
+                                <span style={{ fontSize: '1rem', lineHeight: 1 }}>+</span> Baru
                             </button>
-                        </div>
-                    ))}
-                    {carts.length < 10 && (
-                        <button className="btn-icon" onClick={createNewCart} style={{ padding: '8px 12px', borderRadius: '6px 6px 0 0', background: 'rgba(255,255,255,0.05)' }} title="Antrean Baru">
-                            <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>+</span>
-                        </button>
-                    )}
+                        )}
+                    </div>
                 </div>
 
                 <div className="cart-header" style={{ paddingTop: 16 }}>
@@ -421,6 +458,38 @@ export default function POS({ carts, setCarts, activeCartId, setActiveCartId, ad
             )}
             {editProduct && (
                 <ProductForm product={editProduct} onClose={() => setEditProduct(null)} />
+            )}
+            {/* Delete Cart Confirm Modal */}
+            {confirmDeleteCart && (
+                <div className="modal-overlay" onClick={() => setConfirmDeleteCart(null)}>
+                    <div className="modal" style={{ maxWidth: 400 }} onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3>🗑️ Tutup Antrean Kasir</h3>
+                            <button className="btn-icon" onClick={() => setConfirmDeleteCart(null)}><X size={18} /></button>
+                        </div>
+                        <div className="modal-body" style={{ textAlign: 'center' }}>
+                            <div style={{
+                                width: 60, height: 60, borderRadius: '50%', background: 'var(--accent-orange-dim)',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px'
+                            }}>
+                                <X size={28} color="var(--accent-orange)" />
+                            </div>
+                            <p style={{ color: 'var(--text-heading)', fontWeight: 600, fontSize: '1rem', marginBottom: 8 }}>
+                                Yakin hapus tab "{confirmDeleteCart.customerName || 'Pelanggan'}"?
+                            </p>
+                            <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                                Terdapat <strong>{confirmDeleteCart.items.length} barang</strong> di keranjang ini yang belum dibayar dan akan hilang.
+                            </p>
+                        </div>
+                        <div className="modal-footer" style={{ justifyContent: 'center', gap: 12 }}>
+                            <button className="btn btn-secondary" onClick={() => setConfirmDeleteCart(null)}>Batal</button>
+                            <button className="btn" onClick={confirmCartDeletion}
+                                style={{ background: 'var(--accent-orange)', color: '#fff' }}>
+                                <X size={16} /> Ya, Hapus Tab
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </div>
     );
