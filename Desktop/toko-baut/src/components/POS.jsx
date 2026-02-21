@@ -259,19 +259,30 @@ export default function POS({ carts, setCarts, activeCartId, setActiveCartId, ad
                             <div key={c.id}
                                 style={{
                                     padding: '8px 12px',
-                                    background: c.id === activeCartId ? 'var(--bg-card)' : 'transparent',
-                                    border: '1px solid var(--border-color)',
+                                    background: c.id === activeCartId ? 'var(--bg-card)' : 'rgba(0,0,0,0.2)',
+                                    borderTop: c.id === activeCartId ? '2px solid var(--accent-gold)' : '1px solid transparent',
+                                    borderLeft: c.id === activeCartId ? '1px solid var(--border-color)' : '1px solid transparent',
+                                    borderRight: c.id === activeCartId ? '1px solid var(--border-color)' : '1px solid transparent',
                                     borderBottom: c.id === activeCartId ? '1px solid var(--bg-card)' : '1px solid var(--border-color)',
                                     marginBottom: '-1px',
                                     borderRadius: '6px 6px 0 0',
                                     cursor: 'pointer',
                                     display: 'flex', alignItems: 'center', gap: 8,
-                                    fontWeight: c.id === activeCartId ? 600 : 400,
-                                    color: c.id === activeCartId ? 'var(--text-heading)' : 'var(--text-muted)',
+                                    fontWeight: c.id === activeCartId ? 700 : 400,
+                                    color: c.id === activeCartId ? 'var(--accent-gold)' : 'var(--text-muted)',
+                                    boxShadow: c.id === activeCartId ? '0 -4px 12px rgba(0,0,0,0.3)' : 'none',
                                     minWidth: 'max-content',
-                                    zIndex: c.id === activeCartId ? 2 : 1
+                                    zIndex: c.id === activeCartId ? 2 : 1,
+                                    transition: 'all 0.2s ease',
+                                    opacity: c.id === activeCartId ? 1 : 0.7
                                 }}
                                 onClick={() => setActiveCartId(c.id)}
+                                onMouseEnter={(e) => {
+                                    if (c.id !== activeCartId) e.currentTarget.style.opacity = '1';
+                                }}
+                                onMouseLeave={(e) => {
+                                    if (c.id !== activeCartId) e.currentTarget.style.opacity = '0.7';
+                                }}
                             >
                                 <span>{c.customerName || `Pelanggan ${i + 1}`}</span>
                                 {c.items.length > 0 && (
