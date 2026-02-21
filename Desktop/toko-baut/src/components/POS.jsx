@@ -259,7 +259,7 @@ export default function POS({ carts, setCarts, activeCartId, setActiveCartId, ad
                             <div key={c.id}
                                 style={{
                                     padding: '8px 12px',
-                                    background: c.id === activeCartId ? 'var(--bg-card)' : 'rgba(0,0,0,0.2)',
+                                    background: c.id === activeCartId ? 'var(--bg-card)' : 'var(--bg-input)',
                                     borderTop: c.id === activeCartId ? '2px solid var(--accent-gold)' : '1px solid transparent',
                                     borderLeft: c.id === activeCartId ? '1px solid var(--border-color)' : '1px solid transparent',
                                     borderRight: c.id === activeCartId ? '1px solid var(--border-color)' : '1px solid transparent',
@@ -268,20 +268,20 @@ export default function POS({ carts, setCarts, activeCartId, setActiveCartId, ad
                                     borderRadius: '6px 6px 0 0',
                                     cursor: 'pointer',
                                     display: 'flex', alignItems: 'center', gap: 8,
-                                    fontWeight: c.id === activeCartId ? 700 : 400,
-                                    color: c.id === activeCartId ? 'var(--accent-gold)' : 'var(--text-muted)',
+                                    fontWeight: c.id === activeCartId ? 700 : 500,
+                                    color: c.id === activeCartId ? 'var(--accent-gold)' : 'var(--text-secondary)',
                                     boxShadow: c.id === activeCartId ? '0 -4px 12px rgba(0,0,0,0.3)' : 'none',
                                     minWidth: 'max-content',
                                     zIndex: c.id === activeCartId ? 2 : 1,
                                     transition: 'all 0.2s ease',
-                                    opacity: c.id === activeCartId ? 1 : 0.7
+                                    opacity: c.id === activeCartId ? 1 : 0.85
                                 }}
                                 onClick={() => setActiveCartId(c.id)}
                                 onMouseEnter={(e) => {
                                     if (c.id !== activeCartId) e.currentTarget.style.opacity = '1';
                                 }}
                                 onMouseLeave={(e) => {
-                                    if (c.id !== activeCartId) e.currentTarget.style.opacity = '0.7';
+                                    if (c.id !== activeCartId) e.currentTarget.style.opacity = '0.85';
                                 }}
                             >
                                 <span>{c.customerName || `Pelanggan ${i + 1}`}</span>
@@ -302,7 +302,7 @@ export default function POS({ carts, setCarts, activeCartId, setActiveCartId, ad
                             <select
                                 value={activeCartId}
                                 onChange={(e) => setActiveCartId(Number(e.target.value))}
-                                style={{ padding: '6px 8px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', fontSize: '0.8rem', background: 'var(--bg-card)', maxWidth: 120 }}
+                                style={{ padding: '6px 8px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border-color)', fontSize: '0.8rem', background: 'var(--bg-card)', color: 'var(--text-primary)', maxWidth: 120 }}
                                 title="Pindah ke antrean lain"
                             >
                                 {carts.map((c, i) => (
