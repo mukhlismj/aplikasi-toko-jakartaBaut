@@ -36,6 +36,7 @@ export default function ProductList({ addToCart }) {
         showSize: true,
         showPrice: true,
         showBarcode: true,
+        showQtyPerUnit: true,
     });
     const [showBulkUpload, setShowBulkUpload] = useState(false);
     const [bulkPreview, setBulkPreview] = useState(null);
@@ -131,6 +132,7 @@ export default function ProductList({ addToCart }) {
             const productName = p.name || '';
             const productSize = p.size || '';
             const priceText = formatRupiah(p.priceUnit ?? p.pricePcs ?? 0) + ' / ' + (p.unit || 'pcs');
+            const qtyPerUnitText = (p.qtyPerUnit || p.qtyPerBulk || 0) > 0 ? `Isi: ${p.qtyPerUnit || p.qtyPerBulk} per 1 ${p.unit || 'pcs'}` : '';
             const barcodeValue = p.barcode || '000000000000';
 
             for (let i = 0; i < item.qty; i++) {
@@ -139,6 +141,7 @@ export default function ProductList({ addToCart }) {
                         ${s.showStoreName ? `<div class="store">${storeName}</div>` : ''}
                         ${s.showProductName ? `<div class="name">${productName}</div>` : ''}
                         ${s.showSize && productSize ? `<div class="size">${productSize}</div>` : ''}
+                        ${s.showQtyPerUnit && qtyPerUnitText ? `<div class="qty-per-unit">${qtyPerUnitText}</div>` : ''}
                         ${s.showPrice ? `<div class="price">${priceText}</div>` : ''}
                         ${s.showBarcode ? `<svg id="bc-${svgIndex}"></svg>` : ''}
                     </div>
@@ -182,6 +185,7 @@ export default function ProductList({ addToCart }) {
                 .store { font-size: 7pt; font-weight: bold; text-align: center; }
                 .name { font-size: 8pt; font-weight: bold; text-align: center; margin-top: 0.5mm; }
                 .size { font-size: 7pt; color: #555; text-align: center; }
+                .qty-per-unit { font-size: 7pt; color: #333; text-align: center; margin-top: 0.5mm; font-style: italic; }
                 .price { font-size: 8pt; font-weight: bold; text-align: center; margin-top: 0.5mm; }
                 svg { display: block; margin: 0 auto; max-width: 100%; }
                 @media print {
@@ -823,6 +827,11 @@ export default function ProductList({ addToCart }) {
                                     {barcodeSettings.showSize && barcodeQueue[0].product.size && (
                                         <div style={{ fontSize: '7pt', color: '#555' }}>{barcodeQueue[0].product.size}</div>
                                     )}
+                                    {barcodeSettings.showQtyPerUnit && (barcodeQueue[0].product.qtyPerUnit || barcodeQueue[0].product.qtyPerBulk || 0) > 0 && (
+                                        <div style={{ fontSize: '7pt', color: '#333', fontStyle: 'italic', marginTop: 2 }}>
+                                            Isi: {barcodeQueue[0].product.qtyPerUnit || barcodeQueue[0].product.qtyPerBulk} per 1 {barcodeQueue[0].product.unit || 'pcs'}
+                                        </div>
+                                    )}
                                     {barcodeSettings.showPrice && (
                                         <div style={{ fontSize: '8pt', fontWeight: 'bold', color: '#000', marginTop: 2 }}>
                                             {formatRupiah(barcodeQueue[0].product.priceUnit ?? barcodeQueue[0].product.pricePcs ?? 0)} / {barcodeQueue[0].product.unit || 'pcs'}
@@ -877,6 +886,7 @@ export default function ProductList({ addToCart }) {
                                         { key: 'showStoreName', label: 'Nama Toko' },
                                         { key: 'showProductName', label: 'Nama Barang' },
                                         { key: 'showSize', label: 'Ukuran / Spesifikasi' },
+                                        { key: 'showQtyPerUnit', label: 'Info Isi per Paket/Satuan' },
                                         { key: 'showPrice', label: 'Harga Jual' },
                                         { key: 'showBarcode', label: 'Barcode' },
                                     ].map(opt => (
